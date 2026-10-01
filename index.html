@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="docTitle">حراج Blox Fruits المتكامل</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --accent-color: #10b981;
+      --accent-hover: #059669;
+      --text-color: #f8fafc;
+      --border-color: #334155;
+      --danger-color: #ef4444;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 15px;
+      direction: rtl;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .header-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      background: var(--border-color);
+      color: var(--text-color);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    .btn-google { background: #4285F4; color: white; }
+    .btn-danger { background: var(--danger-color); color: white; }
+
+    .warning-banner {
+      background-color: rgba(239, 68, 68, 0.15);
+      border: 1px solid var(--danger-color);
+      color: #fca5a5;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    select, input, textarea {
+      width: 100%;
+      padding: 10px;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .submit-btn:hover { background: var(--accent-hover); }
+
+    .trades-list { margin-top: 20px; }
+
+    .trade-card {
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .trade-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 5px;
+      margin-bottom: 8px;
+    }
+
+    .user-link {
+      color: #60a5fa;
+      cursor: pointer;
+      text-decoration: underline;
+      font-weight: bold;
+    }
+
+    .quick-replies {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .reply-btn {
+      background: var(--border-color);
+      color: var(--text-color);
+      border: none;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .history-fab {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 50px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      cursor: pointer;
+      font-weight: bold;
+      z-index: 99;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      position: relative;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 10px;
+      left: 15px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--danger-color);
+      font-weight: bold;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h2 id="title">حراج Blox Fruits</h2>
+    <div class="header-btns">
+      <button class="btn btn-google" id="googleBtn" onclick="handleGoogleLogin()">تسجيل بـ Google</button>
+      <button class="btn btn-danger" id="reportOpenBtn" onclick="openModal('reportModal')">تقديم بلاغ</button>
+      <button class="btn" id="langBtn" onclick="toggleLanguage()">English</button>
+    </div>
+  </div>
+
+  <div class="warning-banner" id="warningBanner">
+    ⚠️ الموقع غير مسؤول إطلاقاً إذا تمت المبادلة أو التعامل على شيء خارج نطاق حراج أو الموقع.
+  </div>
+
+  <form id="tradeForm" onsubmit="return false;">
+    <div class="form-group">
+      <label id="lblUser">اسم حسابك للتواصل (روبلوكس / ديسكورد):</label>
+      <input type="text" id="username" placeholder="مثال: RobloxUser123">
+    </div>
+
+    <div class="form-group">
+      <label id="lblType">نوع العملية:</label>
+      <select id="tradeType" onchange="updateFormFields()">
+        <option value="trade" id="optTrade">تداول (مقايضة)</option>
+        <option value="sell" id="optSell">بيع</option>
+        <option value="search" id="optSearch">أبحث عن</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label id="lblState">حالة الفاكهة:</label>
+      <select id="fruitState">
+        <option value="physical" id="optPhysical">عادية (Physical)</option>
+        <option value="perm" id="optPerm">دائمة (Perm)</option>
+      </select>
+    </div>
+
+    <div id="offeredGroup" class="form-group">
+      <label id="lblOffered">الفاكهة المعروضة / المتوفرة:</label>
+      <select id="offeredFruit"></select>
+    </div>
+
+    <div id="requestedGroup" class="form-group">
+      <label id="lblRequested">الفاكهة المطلوبة / أو السعر:</label>
+      <select id="requestedFruit"></select>
+      <input type="text" id="priceInput" class="hidden" placeholder="حدد السعر المطلوب...">
+    </div>
+
+    <button type="button" class="submit-btn" id="submitBtn" onclick="handlePublishClick()">نشر العرض فوراً</button>
+  </form>
+
+  <hr style="margin: 25px 0; border-color: var(--border-color);">
+
+  <h3 id="lblRecent">أحدث عروض التداول والبيع</h3>
+  <div class="trades-list" id="tradesList">
+    <p id="noTradesText" style="text-align: center; color: #888;">لا توجد عروض حالياً، كن أول من ينشر عرضاً!</p>
+  </div>
+</div>
+
+<button class="history-fab" id="historyFabBtn" onclick="openModal('historyModal')">💬 المحادثات</button>
+
+<!-- نافذة المحادثات -->
+<div id="historyModal" class="modal-overlay hidden">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeModal('historyModal')">✖</span>
+    <h3 id="modalHistTitle">سجل المحادثات السابقة</h3>
+    <div id="historyList">
+      <p style="color: #888;" id="noHistText">لا توجد محادثات سابقة.</p>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة البروفايل -->
+<div id="profileModal" class="modal-overlay hidden">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeModal('profileModal')">✖</span>
+    <h3 id="profUserTitle">ملف المستخدم</h3>
+    <p><b id="lblRating">التقييم:</b> ⭐⭐⭐⭐⭐ (5/5)</p>
+    <hr style="border-color: var(--border-color);">
+    <h4 id="profChatTitle">محادثة خاصة</h4>
+    <div id="chatBox" style="height: 120px; background: var(--bg-color); border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; overflow-y: auto; margin-bottom: 10px;"></div>
+    <div style="display: flex; gap: 5px;">
+      <input type="text" id="chatInput" placeholder="اكتب رسالتك...">
+      <button class="btn" style="background: var(--accent-color); color: white;" onclick="sendChatMessage()" id="chatSendBtn">إرسال</button>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة البلاغات -->
+<div id="reportModal" class="modal-overlay hidden">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeModal('reportModal')">✖</span>
+    <h3 id="reportTitle">تقديم بلاغ عن محتال</h3>
+    <div class="form-group">
+      <label id="lblReportUser">اسم يوزر المشتبه به:</label>
+      <input type="text" id="reportUsername" placeholder="يوزر روبلوكس / ديسكورد">
+    </div>
+    <div class="form-group">
+      <label id="lblReportDesc">تفاصيل ما حدث معك:</label>
+      <textarea id="reportDesc" rows="3" placeholder="اشرح التفاصيل..."></textarea>
+    </div>
+    <button class="submit-btn" onclick="submitReport()" id="reportSubmitBtn">إرسال البلاغ</button>
+  </div>
+</div>
+
+<script>
+  const allFruits = [
+    "Rocket", "Spin", "Blade", "Spring", "Bomb", "Smoke", "Spike", "Flame", 
+    "Eagle", "Ice", "Sand", "Dark", "Diamond", "Light", "Rubber", "Creation", 
+    "Ghost", "Magma", "Quake", "Buddha", "Love", "Spider", "Sound", "Phoenix", 
+    "Portal", "Lightning", "Pain", "Blizzard", "Gravity", "Mammoth", "T-Rex", 
+    "Dough", "Shadow", "Venom", "Control", "Spirit", "Dragon", "Leopard", "Kitsune"
+  ];
+
+  let currentLang = 'ar';
+  let publishClickCount = 0;
+  let clickTimer = null;
+  let activeProfileUser = '';
+
+  function populateFruits() {
+    const offeredSelect = document.getElementById('offeredFruit');
+    const requestedSelect = document.getElementById('requestedFruit');
+    
+    // الاحتفاظ بالقيم المختارة سابقاً إن وجدت
+    const prevOffered = offeredSelect.value;
+    const prevRequested = requestedSelect.value;
+
+    offeredSelect.innerHTML = '';
+    requestedSelect.innerHTML = '';
+
+    const optDefault1 = document.createElement('option');
+    optDefault1.value = '';
+    optDefault1.textContent = currentLang === 'ar' ? '-- اختر الفاكهة --' : '-- Select Fruit --';
+    offeredSelect.appendChild(optDefault1);
+
+    const optDefault2 = document.createElement('option');
+    optDefault2.value = '';
+    optDefault2.textContent = currentLang === 'ar' ? '-- اختر الفاكهة --' : '-- Select Fruit --';
+    requestedSelect.appendChild(optDefault2);
+
+    const optGood = document.createElement('option');
+    optGood.value = 'عرض كويس';
+    optGood.textContent = currentLang === 'ar' ? 'عرض كويس' : 'Good Offer';
+    requestedSelect.appendChild(optGood);
+
+    allFruits.forEach(fruit => {
+      const o1 = document.createElement('option');
+      o1.value = fruit;
+      o1.textContent = fruit;
+      offeredSelect.appendChild(o1);
+
+      const o2 = document.createElement('option');
+      o2.value = fruit;
+      o2.textContent = fruit;
+      requestedSelect.appendChild(o2);
+    });
+
+    if (prevOffered) offeredSelect.value = prevOffered;
+    if (prevRequested) requestedSelect.value = prevRequested;
+  }
+
+  function updateFormFields() {
+    const type = document.getElementById('tradeType').value;
+    const offeredGroup = document.getElementById('offeredGroup');
+    const requestedFruit = document.getElementById('requestedFruit');
+    const priceInput = document.getElementById('priceInput');
+
+    if (type === 'search') {
+      offeredGroup.classList.add('hidden');
+      requestedFruit.classList.remove('hidden');
+      priceInput.classList.add('hidden');
+    } else if (type === 'sell') {
+      offeredGroup.classList.remove('hidden');
+      requestedFruit.classList.add('hidden');
+      priceInput.classList.remove('hidden');
+    } else {
+      offeredGroup.classList.remove('hidden');
+      requestedFruit.classList.remove('hidden');
+      priceInput.classList.add('hidden');
+    }
+  }
+
+  function handlePublishClick() {
+    publishClickCount++;
+
+    if (publishClickCount === 7) {
+      if (clickTimer) clearTimeout(clickTimer);
+      publishClickCount = 0;
+      const code = prompt(currentLang === 'ar' ? "أدخل رمز الأدمن:" : "Enter Admin Code:");
+      if (code === "kokusen1") alert(currentLang === 'ar' ? "مرحباً بالأدمن ياسر" : "Welcome Admin Yasser");
+      else if (code === "songoku2") alert(currentLang === 'ar' ? "مرحباً بالأدمن أصيل" : "Welcome Admin Aseel");
+      else if (code) alert(currentLang === 'ar' ? "رمز خاطئ!" : "Incorrect Code!");
+      return;
+    }
+
+    if (clickTimer) clearTimeout(clickTimer);
+
+    clickTimer = setTimeout(() => {
+      if (publishClickCount > 0 && publishClickCount < 7) {
+        addTrade();
+      }
+      publishClickCount = 0;
+    }, 450);
+  }
+
+  function addTrade() {
+    const username = document.getElementById('username').value.trim();
+    const type = document.getElementById('tradeType').value;
+    const state = document.getElementById('fruitState').value;
+    const offered = document.getElementById('offeredFruit').value;
+    const requested = document.getElementById('requestedFruit').value;
+    const price = document.getElementById('priceInput').value.trim();
+
+    if (!username) {
+      alert(currentLang === 'ar' ? "يرجى كتابة اسم حسابك أولاً!" : "Please write your username!");
+      return;
+    }
+
+    if (type !== 'search' && !offered) {
+      alert(currentLang === 'ar' ? "يرجى اختيار الفاكهة المعروضة!" : "Please select offered fruit!");
+      return;
+    }
+
+    if (type === 'sell' && !price) {
+      alert(currentLang === 'ar' ? "يرجى تحديد السعر المطلوب!" : "Please specify the price!");
+      return;
+    }
+
+    if ((type === 'trade' || type === 'search') && !requested) {
+      alert(currentLang === 'ar' ? "يرجى اختيار الفاكهة المطلوبة!" : "Please select requested fruit!");
+      return;
+    }
+
+    const noTradesText = document.getElementById('noTradesText');
+    if (noTradesText) noTradesText.remove();
+
+    const tradesList = document.getElementById('tradesList');
+    const card = document.createElement('div');
+    card.className = 'trade-card';
+
+    let details = '';
+    const stateText = state === 'perm' ? (currentLang === 'ar' ? 'دائمة' : 'Perm') : (currentLang === 'ar' ? 'عادية' : 'Physical');
+    const typeLabel = type === 'sell' ? (currentLang === 'ar' ? 'بيع' : 'Sell') : 
+                      type === 'search' ? (currentLang === 'ar' ? 'أبحث عن' : 'Search') : 
+                      (currentLang === 'ar' ? 'تداول' : 'Trade');
+
+    if (type === 'search') {
+      details = currentLang === 'ar' ? `يبحث عن: <b>${requested}</b> (${stateText})` : `Searching for: <b>${requested}</b> (${stateText})`;
+    } else if (type === 'sell') {
+      details = currentLang === 'ar' ? `يعرض: <b>${offered}</b> (${stateText}) | السعر: <b>${price}</b>` : `Selling: <b>${offered}</b> (${stateText}) | Price: <b>${price}</b>`;
+    } else {
+      details = currentLang === 'ar' ? `يعرض: <b>${offered}</b> (${stateText}) 🔁 يطلب: <b>${requested}</b>` : `Offering: <b>${offered}</b> (${stateText}) 🔁 Requesting: <b>${requested}</b>`;
+    }
+
+    const r1 = currentLang === 'ar' ? 'أنا لدي عرض' : 'I have an offer';
+    const r2 = currentLang === 'ar' ? 'تعال خاص' : 'Come DM';
+
+    card.innerHTML = `
+      <div class="trade-header">
+        <span class="user-link" onclick="openProfile('${username}')">👤 ${username}</span>
+        <span style="color: var(--accent-color); font-weight: bold;">[${typeLabel}]</span>
+      </div>
+      <div>${details}</div>
+      <div class="quick-replies">
+        <button class="reply-btn" onclick="sendReply('${username}', '${r1}')">${r1}</button>
+        <button class="reply-btn" onclick="sendReply('${username}', '${r2}')">${r2}</button>
+      </div>
+    `;
+
+    tradesList.prepend(card);
+    document.getElementById('username').value = '';
+  }
+
+  function sendReply(user, msg) {
+    alert((currentLang === 'ar' ? 'تم إرسال الرد إلى ' : 'Sent to ') + user + ': ' + msg);
+    saveToHistory(user, msg);
+  }
+
+  function handleGoogleLogin() {
+    alert(currentLang === 'ar' ? "جاري تحويلك لتسجيل الدخول بـ Google..." : "Redirecting to Google Login...");
+  }
+
+  function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+  function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+  function openProfile(uname) {
+    activeProfileUser = uname;
+    document.getElementById('profUserTitle').innerText = (currentLang === 'ar' ? 'ملف المستخدم: ' : 'User: ') + uname;
+    document.getElementById('chatBox').innerHTML = `<p style="color:#888;">${currentLang === 'ar' ? 'ابدأ المحادثة...' : 'Start chat...'}</p>`;
+    openModal('profileModal');
+  }
+
+  function sendChatMessage() {
+    const input = document.getElementById('chatInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    const chatBox = document.getElementById('chatBox');
+    const youText = currentLang === 'ar' ? 'أنت' : 'You';
+    chatBox.innerHTML += `<div><b>${youText}:</b> ${msg}</div>`;
+    
+    saveToHistory(activeProfileUser, msg);
+    input.value = '';
+  }
+
+  function saveToHistory(user, msg) {
+    const noHistText = document.getElementById('noHistText');
+    if (noHistText) noHistText.remove();
+
+    const historyList = document.getElementById('historyList');
+    const chatWithText = currentLang === 'ar' ? 'محادثة مع' : 'Chat with';
+    historyList.innerHTML += `<div style="padding: 6px 0; border-bottom: 1px solid var(--border-color);"><b>${chatWithText} ${user}:</b> ${msg}</div>`;
+  }
+
+  function submitReport() {
+    const uname = document.getElementById('reportUsername').value.trim();
+    const desc = document.getElementById('reportDesc').value.trim();
+    if (!uname || !desc) {
+      alert(currentLang === 'ar' ? "يرجى تعبئة كافة الحقول المطلوبة!" : "Please fill all fields!");
+      return;
+    }
+    alert(currentLang === 'ar' ? "تم إرسال البلاغ بنجاح!" : "Report sent successfully!");
+    document.getElementById('reportUsername').value = '';
+    document.getElementById('reportDesc').value = '';
+    closeModal('reportModal');
+  }
+
+  function toggleLanguage() {
+    currentLang = currentLang === 'ar' ? 'en' : 'ar';
+    document.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+
+    document.getElementById('docTitle').innerText = currentLang === 'ar' ? 'حراج Blox Fruits' : 'Blox Fruits Market';
+    document.getElementById('title').innerText = currentLang === 'ar' ? 'حراج Blox Fruits' : 'Blox Fruits Market';
+    document.getElementById('langBtn').innerText = currentLang === 'ar' ? 'English' : 'عربي';
+    document.getElementById('googleBtn').innerText = currentLang === 'ar' ? 'تسجيل بـ Google' : 'Login with Google';
+    document.getElementById('reportOpenBtn').innerText = currentLang === 'ar' ? 'تقديم بلاغ' : 'Report User';
+    document.getElementById('submitBtn').innerText = currentLang === 'ar' ? 'نشر العرض فوراً' : 'Publish Offer';
+    document.getElementById('historyFabBtn').innerText = currentLang === 'ar' ? '💬 المحادثات' : '💬 Chats';
+    document.getElementById('lblRecent').innerText = currentLang === 'ar' ? 'أحدث عروض التداول والبيع' : 'Recent Trades & Sales';
+
+    document.getElementById('lblUser').innerText = currentLang === 'ar' ? 'اسم حسابك للتواصل (روبلوكس / ديسكورد):' : 'Username (Roblox / Discord):';
+    document.getElementById('username').placeholder = currentLang === 'ar' ? 'مثال: RobloxUser123' : 'Ex: RobloxUser123';
+    document.getElementById('lblType').innerText = currentLang === 'ar' ? 'نوع العملية:' : 'Operation Type:';
+    document.getElementById('lblState').innerText = currentLang === 'ar' ? 'حالة الفاكهة:' : 'Fruit State:';
+    document.getElementById('lblOffered').innerText = currentLang === 'ar' ? 'الفاكهة المعروضة / المتوفرة:' : 'Offered Fruit:';
+    document.getElementById('lblRequested').innerText = currentLang === 'ar' ? 'الفاكهة المطلوبة / أو السعر:' : 'Requested Fruit / Price:';
+
+    document.getElementById('optTrade').innerText = currentLang === 'ar' ? 'تداول (مقايضة)' : 'Trade';
+    document.getElementById('optSell').innerText = currentLang === 'ar' ? 'بيع' : 'Sell';
+    document.getElementById('optSearch').innerText = currentLang === 'ar' ? 'أبحث عن' : 'Search';
+    
+    document.getElementById('optPhysical').innerText = currentLang === 'ar' ? 'عادية (Physical)' : 'Physical';
+    document.getElementById('optPerm').innerText = currentLang === 'ar' ? 'دائمة (Perm)' : 'Permanent (Perm)';
+
+    document.getElementById('warningBanner').innerText = currentLang === 'ar' ? 
+      '⚠️ الموقع
